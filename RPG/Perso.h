@@ -10,11 +10,18 @@ class Perso {
    Perso (SDL_Renderer *renderer, std::string name);
    ~Perso ();
    void afficher (SDL_Renderer *renderer); /* affiche le perso */
-   void droite (); /* déplace le perso vers la droite */
-   void gauche (); /* déplace le perso vers la gauche */
-   void haut (); /* déplace le perso vers le haut */
-   void bas (); /* déplace le perso vers le bas */
-   int attaquer ();
+   void droite (Back& map); /* déplace le perso vers la droite */
+   void gauche (Back& map); /* déplace le perso vers la gauche */
+   void haut (Back& map); /* déplace le perso vers le haut */
+   void bas (Back& map); /* déplace le perso vers le bas */
+   void vise_special (); /* switch m_is_fighting to true and switch fight_use_special to true */
+   void vise (); /* switch m_is_fighting to true and switch fight_use_special to false */
+   int attaquer (); /* appelle attaquer_physique ou attaquer_special */
+   void attaquer_physique (); /* attaque physique (clic gauche) */
+   void attaquer_special (); /* attaque physique (clic droit) */
+   SDL_Rect* get_pos ();
+   int get_orientation () const;
+   int get_porte () const;
    int recevoir_degats (int degats);
 
   private:
@@ -24,6 +31,13 @@ class Perso {
    SDL_Rect m_R_perso; // emplacement du perso dans la fenetre
 
    int m_depl;
+   int m_porte;
+
+   bool m_is_fighting, m_fight_use_special;
+   SDL_Texture *m_fleche [4], *m_special_fleche [4];
+   SDL_Rect m_Rfleche;
+
+   bool m_a_tire;
 
    std::string m_name;
 };

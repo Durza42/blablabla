@@ -15,16 +15,16 @@ Back::~Back () {
    SDL_DestroyTexture (m_mode_mur);
    SDL_DestroyTexture (m_mode_lave);
 
-   for (unsigned int i = 0 ; i < 18 ; i += 1) {
-      for (unsigned int j = 0 ; j < 12 ; j += 1) {
+   for (unsigned int i = 0 ; i < 36 ; i += 1) {
+      for (unsigned int j = 0 ; j < 24 ; j += 1) {
          SDL_DestroyTexture (m_text_map [i][j]);
       }
    }
 }
 
 void Back::afficher (SDL_Renderer *renderer) {
-   for (unsigned int i = 0 ; i < 18 ; i += 1)
-      for (unsigned int j = 0 ; j < 12 ; j += 1)
+   for (unsigned int i = 0 ; i < 36 ; i += 1)
+      for (unsigned int j = 0 ; j < 24 ; j += 1)
          SDL_RenderCopy (renderer, m_text_map [i][j], NULL, &m_map [i][j]);
 }
 
@@ -43,62 +43,49 @@ void Back::change_to (const int x, const int y, const short int mode) {
 
 void Back::init_map () {
 
-   for (int i = 0 ; i < 18 ; i += 1) {
-      for (int j = 0 ; j < 12 ; j += 1) {
+   for (int i = 0 ; i < 36 ; i += 1) {
+      for (int j = 0 ; j < 24 ; j += 1) {
          m_text_map [i][j] = m_mode_mur;
-         m_map [i][j] = (SDL_Rect) {i * 50, j * 50, 50, 50};
+         m_map [i][j] = (SDL_Rect) {i * 25, j * 25, 25, 25};
          m_values_map [i][j] = 2;
       }
    }
 
-   change_to (6, 3, 1);
-   change_to (6, 4, 1);
-   change_to (6, 5, 1);
-   change_to (6, 6, 1);
-   change_to (6, 7, 1);
+   change_to_rect ((SDL_Rect) {11, 5, 14, 12});
 
-   change_to (7, 3, 1);
-   change_to (7, 4, 1);
-   change_to (7, 5, 1);
-   change_to (7, 6, 1);
-   change_to (7, 7, 1);
 
-   change_to (8, 3, 1);
-   change_to (8, 4, 1);
-   change_to (8, 5, 1);
-   change_to (8, 6, 1);
-   change_to (8, 7, 1);
+   change_to_rect ((SDL_Rect) {3, 10, 8, 3});
+   change_to_rect ((SDL_Rect) {25, 10, 8, 3});
+   change_to_rect ((SDL_Rect) {17, 0, 3, 8});
+   change_to_rect ((SDL_Rect) {17, 17, 3, 8});
 
-   change_to (9, 3, 1);
-   change_to (9, 4, 1);
-   change_to (9, 5, 1);
-   change_to (9, 6, 1);
-   change_to (9, 7, 1);
+   change_to_rect ((SDL_Rect) {3, 7, 3, 3});
+   change_to_rect ((SDL_Rect) {3, 13, 3, 3});
 
-   change_to (10, 3, 1);
-   change_to (10, 4, 1);
-   change_to (10, 5, 1);
-   change_to (10, 6, 1);
-   change_to (10, 7, 1);
+   change_to_rect ((SDL_Rect) {30, 7, 3, 3});
+   change_to_rect ((SDL_Rect) {30, 13, 3, 3});
 
-   change_to (11, 3, 1);
-   change_to (11, 4, 1);
-   change_to (11, 5, 1);
-   change_to (11, 6, 1);
-   change_to (11, 7, 1);
+   change_to_rect ((SDL_Rect) {14, 0, 3, 3});
+   change_to_rect ((SDL_Rect) {20, 0, 3, 3});
 
-   change_to (12, 5, 1);
-   change_to (13, 5, 1);
-   change_to (13, 6, 1);
+   change_to_rect ((SDL_Rect) {14, 21, 3, 3});
+   change_to_rect ((SDL_Rect) {20, 21, 3, 3});
 }
 
 
-unsigned short int Back::get_value (const short int x, const short int y) {
+unsigned short int Back::get_value (const short int x, const short int y) const {
    return m_values_map [x][y];
 }
 
 
-
+void Back::change_to_rect (SDL_Rect rect) {
+   for (unsigned int i = rect.x ; i < rect.x + rect.w ; ++i) {
+      for (unsigned int j = rect.y ; j < rect.y + rect.h ; j += 1) {
+         m_values_map [i][j] = 1;
+         m_text_map [i][j] = m_mode_chemin;
+      }
+   }
+}
 
 
 
