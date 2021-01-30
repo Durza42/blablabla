@@ -1,14 +1,41 @@
+#ifndef CPP
+#define CPP
+#endif
+
+#include "autres.h"
 #include "class.h"
+#include "back.h"
+#include "magie.h"
+#include "Perso.h"
+#include "boucle.h"
+#include "main.h"
+#include <iostream>
+#include <string> // permet d'utiliser les chaines de charactère dans des variables
+#include <cmath> // permet d'obtenir la valeur absolue d'un nombre
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+//#include "../lib_malo/malo.h" // ATENTION : bibliothèque écrite en C
+
 
    // assembleur
-Basic::Basic () /*: imgs (m_renderer) */{
+Basic::Basic () {
 
-   m_long_wind = 900;
-   m_haut_wind = 600;
-
-   m_fenetre = SDL_CreateWindow ("RPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_long_wind, m_haut_wind, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+   m_fenetre = SDL_CreateWindow ("RPG", 0, 0, 900, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
    m_renderer = SDL_CreateRenderer (m_fenetre, -1, SDL_RENDERER_ACCELERATED);
-   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, m_long_wind, m_haut_wind);
+   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 900, 600);
+   m_font = TTF_OpenFont ("../lib_malo/C059.otf", 30);
+
+   SDL_SetRenderTarget (m_renderer, m_render);
+}
+
+   // assembleur
+Basic::Basic (size_t _long, size_t haut) {
+
+   m_fenetre = SDL_CreateWindow ("RPG", _long, haut, 900, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+   m_renderer = SDL_CreateRenderer (m_fenetre, -1, SDL_RENDERER_ACCELERATED);
+   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 900, 600);
+   m_font = TTF_OpenFont ("../lib_malo/C059.otf", 30);
 
    SDL_SetRenderTarget (m_renderer, m_render);
 }
@@ -18,6 +45,7 @@ Basic::~Basic () {
    SDL_DestroyWindow (m_fenetre);
    SDL_DestroyRenderer (m_renderer);
    SDL_DestroyTexture (m_render);
+   TTF_CloseFont (m_font);
 }
 
 SDL_Renderer* Basic::get_renderer () const {
@@ -42,5 +70,9 @@ void Basic::clear () {
    SDL_RenderClear (m_renderer);
 }
 
+
+TTF_Font* Basic::get_font () {
+   return m_font;
+}
 
 

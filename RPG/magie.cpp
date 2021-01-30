@@ -1,4 +1,22 @@
+#ifndef CPP
+#define CPP
+#endif
+
+#include "autres.h"
+#include "class.h"
+#include "back.h"
 #include "magie.h"
+#include "Perso.h"
+#include "boucle.h"
+#include "main.h"
+#include <iostream>
+#include <string> // permet d'utiliser les chaines de charactère dans des variables
+#include <cmath> // permet d'obtenir la valeur absolue d'un nombre
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "../lib_malo/malo.h" // ATENTION : bibliothèque écrite en C
+
 
    // assembleur
 Magie::Magie (SDL_Renderer *renderer, SDL_Rect* empl_dep, int orientation, int trajet) {
@@ -26,8 +44,6 @@ SDL_Rect Magie::Up () {
 
    if (m_orientation == 0) {
 
-//      if (back.get_value (convert_cooWindX_to_cooMapX (m_Rmagie.x, false), convert_cooWindY_to_cooMapY (m_Rmagie.y - 10, false)) != 2)
-
       if (m_trajet - 10 >= 0) {
          m_Rmagie.y -= 10;
          m_trajet -= 10;
@@ -37,8 +53,6 @@ SDL_Rect Magie::Up () {
       }
    }
    else if (m_orientation == 1) {
-
-//      if (back.get_value (convert_cooWindX_to_cooMapX (m_Rmagie.x + 10, false), convert_cooWindY_to_cooMapY (m_Rmagie.y, false)) != 2)
 
       if (m_trajet - 10 >= 0) {
          m_Rmagie.x += 10;
@@ -50,8 +64,6 @@ SDL_Rect Magie::Up () {
    }
    else if (m_orientation == 2) {
 
-//      if (back.get_value (convert_cooWindX_to_cooMapX (m_Rmagie.x, false), convert_cooWindY_to_cooMapY (m_Rmagie.y + 10, false)) != 2)
-
       if (m_trajet - 10 >= 0) {
          m_Rmagie.y += 10;
          m_trajet -= 10;
@@ -61,8 +73,6 @@ SDL_Rect Magie::Up () {
       }
    }
    else if (m_orientation == 3) {
-
-//      if (back.get_value (convert_cooWindX_to_cooMapX (m_Rmagie.x - 10, false), convert_cooWindY_to_cooMapY (m_Rmagie.y, false)) != 2)
 
       if (m_trajet - 10 >= 0) {
          m_Rmagie.x -= 10;
@@ -80,5 +90,21 @@ SDL_Rect Magie::Up () {
 void Magie::afficher (SDL_Renderer *renderer) {
    SDL_RenderCopy (renderer, m_magie, NULL, &m_Rmagie);
 }
+
+
+SDL_Rect Magie::get_rect () {
+   return m_Rmagie;
+}
+
+
+void Magie::a_touche () {
+   m_Rmagie.x = -50;
+   m_Rmagie.y = -50;
+}
+
+
+
+
+
 
 

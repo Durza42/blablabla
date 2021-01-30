@@ -1,5 +1,22 @@
+#ifndef CPP
+#define CPP
+#endif
 
+#include "autres.h"
+#include "class.h"
+#include "back.h"
+#include "magie.h"
+#include "Perso.h"
+#include "boucle.h"
 #include "main.h"
+#include <iostream>
+#include <string> // permet d'utiliser les chaines de charactère dans des variables
+#include <cmath> // permet d'obtenir la valeur absolue d'un nombre
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "../lib_malo/malo.h" // ATENTION : bibliothèque écrite en C
+
 
 
 using namespace std;
@@ -11,7 +28,7 @@ int main () {
       Quit ();
    }
 
-   boucle_J1 ();
+   boucle ();
 
    Quit ();
    return EXIT_SUCCESS;

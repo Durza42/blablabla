@@ -1,6 +1,10 @@
 #ifndef BACK_H
 #define BACK_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+
 class Back {
 
   public:
@@ -21,9 +25,9 @@ class Back {
    SDL_Texture *m_mode_mur;
    SDL_Texture *m_mode_lave;
 
-   SDL_Rect m_map [36][24]; // les emplacements des rectangles de la map
-   SDL_Texture *m_text_map [36][24]; // les textures des rectangles de la map
-   unsigned short int m_values_map [36][24]; // vaut 1 si chemin, 2 si mur, 3 si lave.
+   SDL_Rect m_map [90][60]; // les emplacements des rectangles de la map
+   SDL_Texture *m_text_map [90][60]; // les textures des rectangles de la map
+   unsigned short int m_values_map [90][60]; // vaut 1 si chemin, 2 si mur, 3 si lave.
 };
 
 #endif
