@@ -1,0 +1,138 @@
+Perso.cpp: In member function ‘bool Perso::up(Magie*, int)’:
+Perso.cpp:598:34: error: request for member ‘get_nb_magies’ in ‘magie’, which is of pointer type ‘Magie*’ (maybe you meant to use ‘->’ ?)
+  598 |    for (size_t i = 0 ; i < magie.get_nb_magies () ; i++) {
+      |                                  ^~~~~~~~~~~~~
+Perso.cpp:601:29: error: no matching function for call to ‘Magie::a_touche()’
+  601 |          magie -> a_touche ();
+      |                             ^
+In file included from Perso.cpp:8:
+magie.h:20:9: note: candidate: ‘void Magie::a_touche(int)’
+   20 |    void a_touche (const int id);
+      |         ^~~~~~~~
+magie.h:20:9: note:   candidate expects 1 argument, 0 provided
+magie.cpp: In member function ‘void Magie::add_magie(SDL_Rect*, int, int)’:
+magie.cpp:47:24: error: no matching function for call to ‘std::vector<SDL_Rect>::push_back()’
+   47 |    m_Rmagie.push_back ();
+      |                        ^
+In file included from /usr/include/c++/9/vector:67,
+                 from magie.h:7,
+                 from magie.cpp:8:
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = SDL_Rect; _Alloc = std::allocator<SDL_Rect>; std::vector<_Tp, _Alloc>::value_type = SDL_Rect]’
+ 1184 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note:   candidate expects 1 argument, 0 provided
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(std::vector<_Tp, _Alloc>::value_type&&) [with _Tp = SDL_Rect; _Alloc = std::allocator<SDL_Rect>; std::vector<_Tp, _Alloc>::value_type = SDL_Rect]’
+ 1200 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note:   candidate expects 1 argument, 0 provided
+magie.cpp:50:29: error: no matching function for call to ‘std::vector<int>::push_back()’
+   50 |    m_orientation.push_back ();
+      |                             ^
+In file included from /usr/include/c++/9/vector:67,
+                 from magie.h:7,
+                 from magie.cpp:8:
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = int; _Alloc = std::allocator<int>; std::vector<_Tp, _Alloc>::value_type = int]’
+ 1184 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note:   candidate expects 1 argument, 0 provided
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(std::vector<_Tp, _Alloc>::value_type&&) [with _Tp = int; _Alloc = std::allocator<int>; std::vector<_Tp, _Alloc>::value_type = int]’
+ 1200 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note:   candidate expects 1 argument, 0 provided
+magie.cpp:53:24: error: no matching function for call to ‘std::vector<int>::push_back()’
+   53 |    m_trajet.push_back ();
+      |                        ^
+In file included from /usr/include/c++/9/vector:67,
+                 from magie.h:7,
+                 from magie.cpp:8:
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = int; _Alloc = std::allocator<int>; std::vector<_Tp, _Alloc>::value_type = int]’
+ 1184 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1184:7: note:   candidate expects 1 argument, 0 provided
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(std::vector<_Tp, _Alloc>::value_type&&) [with _Tp = int; _Alloc = std::allocator<int>; std::vector<_Tp, _Alloc>::value_type = int]’
+ 1200 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/9/bits/stl_vector.h:1200:7: note:   candidate expects 1 argument, 0 provided
+magie.cpp: At global scope:
+magie.cpp:58:6: error: no declaration matches ‘void Magie::delete_magie(int)’
+   58 | void Magie::delete_magie (const int id) {
+      |      ^~~~~
+magie.cpp:58:6: note: no functions named ‘void Magie::delete_magie(int)’
+In file included from magie.cpp:8:
+magie.h:9:7: note: ‘class Magie’ defined here
+    9 | class Magie {
+      |       ^~~~~
+magie.cpp: In member function ‘SDL_Rect Magie::Up()’:
+magie.cpp:115:11: error: could not convert ‘((Magie*)this)->Magie::m_Rmagie’ from ‘std::vector<SDL_Rect>’ to ‘SDL_Rect’
+  115 |    return m_Rmagie;
+      |           ^~~~~~~~
+      |           |
+      |           std::vector<SDL_Rect>
+magie.cpp: At global scope:
+magie.cpp:119:10: error: no declaration matches ‘SDL_Rect Magie::Up(size_t)’
+  119 | SDL_Rect Magie::Up (const size_t i) {
+      |          ^~~~~
+magie.cpp:81:10: note: candidate is: ‘SDL_Rect Magie::Up()’
+   81 | SDL_Rect Magie::Up () {
+      |          ^~~~~
+In file included from magie.cpp:8:
+magie.h:9:7: note: ‘class Magie’ defined here
+    9 | class Magie {
+      |       ^~~~~
+magie.cpp:154:6: error: no declaration matches ‘void Magie::afficher(SDL_Renderer*, SDL_Renderer*)’
+  154 | void Magie::afficher (SDL_Renderer *renderer1, SDL_Renderer *renderer2) {
+      |      ^~~~~
+In file included from magie.cpp:8:
+magie.h:19:9: note: candidate is: ‘void Magie::afficher(SDL_Renderer*)’
+   19 |    void afficher (SDL_Renderer *renderer);
+      |         ^~~~~~~~
+magie.h:9:7: note: ‘class Magie’ defined here
+    9 | class Magie {
+      |       ^~~~~
+magie.cpp:164:6: error: no declaration matches ‘void Magie::afficher(SDL_Renderer*, SDL_Renderer*, int)’
+  164 | void Magie::afficher (SDL_Renderer *renderer1, SDL_Renderer *renderer2, const int id) {
+      |      ^~~~~
+In file included from magie.cpp:8:
+magie.h:19:9: note: candidate is: ‘void Magie::afficher(SDL_Renderer*)’
+   19 |    void afficher (SDL_Renderer *renderer);
+      |         ^~~~~~~~
+magie.h:9:7: note: ‘class Magie’ defined here
+    9 | class Magie {
+      |       ^~~~~
+boucle.cpp: In function ‘int boucle()’:
+boucle.cpp:39:106: error: no matching function for call to ‘Magie::Magie(SDL_Renderer*, SDL_Rect*, int, int)’
+   39 |    Magie magie (var.get_renderer (), perso_1.get_pos (), perso_1.get_orientation (), perso_1.get_porte ());
+      |                                                                                                          ^
+In file included from boucle.cpp:8:
+magie.h:14:4: note: candidate: ‘Magie::Magie(SDL_Renderer*, SDL_Renderer*, SDL_Rect*, int, int)’
+   14 |    Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2, SDL_Rect* empl_dep, int orientation, int trajet);
+      |    ^~~~~
+magie.h:14:4: note:   candidate expects 5 arguments, 4 provided
+magie.h:13:4: note: candidate: ‘Magie::Magie(SDL_Renderer*, SDL_Renderer*)’
+   13 |    Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2);
+      |    ^~~~~
+magie.h:13:4: note:   candidate expects 2 arguments, 4 provided
+magie.h:9:7: note: candidate: ‘Magie::Magie(const Magie&)’
+    9 | class Magie {
+      |       ^~~~~
+magie.h:9:7: note:   candidate expects 1 argument, 4 provided
+boucle.cpp:40:107: error: no matching function for call to ‘Magie::Magie(SDL_Renderer*, SDL_Rect*, int, int)’
+   40 |    Magie magie2 (var.get_renderer (), perso_2.get_pos (), perso_2.get_orientation (), perso_2.get_porte ());
+      |                                                                                                           ^
+In file included from boucle.cpp:8:
+magie.h:14:4: note: candidate: ‘Magie::Magie(SDL_Renderer*, SDL_Renderer*, SDL_Rect*, int, int)’
+   14 |    Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2, SDL_Rect* empl_dep, int orientation, int trajet);
+      |    ^~~~~
+magie.h:14:4: note:   candidate expects 5 arguments, 4 provided
+magie.h:13:4: note: candidate: ‘Magie::Magie(SDL_Renderer*, SDL_Renderer*)’
+   13 |    Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2);
+      |    ^~~~~
+magie.h:13:4: note:   candidate expects 2 arguments, 4 provided
+magie.h:9:7: note: candidate: ‘Magie::Magie(const Magie&)’
+    9 | class Magie {
+      |       ^~~~~
+magie.h:9:7: note:   candidate expects 1 argument, 4 provided
+boucle.cpp:155:14: error: ‘magie1’ was not declared in this scope; did you mean ‘magie2’?
+  155 |          if (magie1.get_nb_magies () == 0) {
+      |              ^~~~~~
+      |              magie2

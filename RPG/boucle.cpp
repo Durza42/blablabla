@@ -18,10 +18,6 @@
 #include "../lib_malo/malo.h" // ATENTION : bibliothèque écrite en C
 
 
-
-using namespace std;
-
-
 int boucle () {
 
    Basic var (0, 0);
@@ -31,16 +27,13 @@ int boucle () {
    Back map (var.get_renderer ());
    Back map2 (var2.get_renderer ());
 
-   Perso perso_1 (var.get_renderer (), "squelette", (SDL_Color) {128, 128, 128}, var.get_font ());
-   Perso perso_2 (var2.get_renderer (), "viking", (SDL_Color) {50, 50, 150}, var.get_font ());
+   Perso perso_1 (var.get_renderer (), var2.get_renderer (), "squelette", (SDL_Color) {128, 128, 128}, var.get_font ());
+   Perso perso_2 (var2.get_renderer (), var.get_renderer (), "viking", (SDL_Color) {50, 50, 150}, var.get_font ());
 
    SDL_Event event;
 
-   Magie magie (var.get_renderer (), perso_1.get_pos (), perso_1.get_orientation (), perso_1.get_porte ());
-   Magie magie2 (var.get_renderer (), perso_2.get_pos (), perso_2.get_orientation (), perso_2.get_porte ());
-   bool magie_existe = false;
-   bool magie_existe2 = false;
-   SDL_Rect temporaire_R;
+   Magie magie (var.get_renderer (), var2.get_renderer (), (SDL_Rect) {-50, -50, 50, 50}, perso_1.get_orientation (), perso_1.get_porte ());
+   Magie magie2 (var.get_renderer (), var2.get_renderer (), (SDL_Rect) {-50, -50, 50, 50}, perso_2.get_orientation (), perso_2.get_porte ());
 
    unsigned int right = 0, left = 0, up = 0, down = 0;
 
@@ -49,16 +42,16 @@ int boucle () {
       SDL_Delay (15); // 60 fps
 
       if (right + 500 > SDL_GetTicks ()) {
-         perso_2.droite (map);
+         var2.change_Xscreen (perso_2.droite (map, var2.get_Rscreen ()));
       }
       else if (left + 500 > SDL_GetTicks ()) {
-         perso_2.gauche (map);
+         var2.change_Xscreen (perso_2.gauche (map, var2.get_Rscreen ()));
       }
       else if (up + 500 > SDL_GetTicks ()) {
-         perso_2.haut (map);
+         var2.change_Yscreen (perso_2.haut (map, var2.get_Rscreen ()));
       }
       else if (down + 500 > SDL_GetTicks ()) {
-         perso_2.bas (map);
+         var2.change_Yscreen (perso_2.bas (map, var2.get_Rscreen ()));
       }
 
       while (SDL_PollEvent (&event)) {
@@ -68,23 +61,19 @@ int boucle () {
          }
          else if (event.type == SDL_KEYDOWN) {
             if (event.key.keysym.sym == SDLK_RIGHT) {
-               perso_2.droite (map2);
-               perso_2.droite (map2);
+               var2.change_Xscreen (perso_2.droite (map, var2.get_Rscreen ()));
                right = SDL_GetTicks ();
             }
             else if (event.key.keysym.sym == SDLK_LEFT) {
-               perso_2.gauche (map2);
-               perso_2.gauche (map2);
+               var2.change_Xscreen (perso_2.gauche (map, var2.get_Rscreen ()));
                left = SDL_GetTicks ();
             }
             else if (event.key.keysym.sym == SDLK_UP) {
-               perso_2.haut (map2);
-               perso_2.haut (map2);
+               var2.change_Yscreen (perso_2.haut (map, var2.get_Rscreen ()));
                up = SDL_GetTicks ();
             }
             else if (event.key.keysym.sym == SDLK_DOWN) {
-               perso_2.bas (map2);
-               perso_2.bas (map2);
+               var2.change_Yscreen (perso_2.bas (map, var2.get_Rscreen ()));
                down = SDL_GetTicks ();
             }
             else if (event.key.keysym.sym == SDLK_a) {
@@ -97,8 +86,7 @@ int boucle () {
          else if (event.type == SDL_KEYUP) {
             if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d) {
                if (perso_2.attaquer () == 1) { // attaquer renvoie 0 si c'est une attaque physique et 1 si c'est une attaque spéciale
-                  magie_existe2 = true;
-                  magie2.remake_magie (perso_2.get_pos (), perso_2.get_orientation (), perso_2.get_porte ());
+                  magie2.add_magie (perso_2.get_pos (), perso_2.get_orientation (), perso_2.get_porte ());
                }
             }
             else if (event.key.keysym.sym == SDLK_RIGHT) {
@@ -119,17 +107,17 @@ int boucle () {
             if (std::abs (event.motion.xrel) > std::abs (event.motion.yrel)) { // si la souris s'est plus déplacée en x que en y
 
                if (event.motion.xrel > 0) // droite
-                  perso_1.droite (map);
+                  var.change_Xscreen (perso_1.droite (map, var.get_Rscreen ()));
                else if (event.motion.xrel < 0) // gauche
-                  perso_1.gauche (map);
+                  var.change_Xscreen (perso_1.gauche (map, var.get_Rscreen ()));
 
             }
             else if (std::abs (event.motion.xrel) < std::abs (event.motion.yrel)) { // si la souris s'est plus déplacée en x que en y
 
                if (event.motion.yrel < 0) // haut
-                  perso_1.haut (map);
+                  var.change_Yscreen (perso_1.haut (map, var.get_Rscreen ()));
                else if (event.motion.yrel > 0) // bas
-                  perso_1.bas (map);
+                  var.change_Yscreen (perso_1.bas (map, var2.get_Rscreen ()));
             }
          }
          else if (event.type == SDL_MOUSEBUTTONDOWN) { // on appuie sur une touche de la souris
@@ -141,76 +129,88 @@ int boucle () {
          }
          else if (event.type == SDL_MOUSEBUTTONUP) { // on relache sur une touche de la souris
             if (perso_1.attaquer () == 1) { // attaquer renvoie 0 si c'est une attaque physique et 1 si c'est une attaque spéciale
-               magie_existe = true;
-               magie.remake_magie (perso_1.get_pos (), perso_1.get_orientation (), perso_1.get_porte ());
+               magie.add_magie (perso_1.get_pos (), perso_1.get_orientation (), perso_1.get_porte ());
             }
          }
       }
-      if (magie_existe) {
+      if (magie.get_nb_magies () > 0) {
 
-         temporaire_R = magie.Up ();
-
-         if (temporaire_R.x == 0 && temporaire_R.y == 0 && temporaire_R.w == 0 && temporaire_R.h == 0)
-            magie_existe = false;
+         magie.Up ();
 
          perso_2.up (&magie, perso_1.get_degats ());
 
-         if (!magie_existe2) {
-            update_screen (&perso_1, &map, &var, &magie, perso_2.get_text ());
-            update_screen (&perso_2, &map2, &var2, perso_1.get_text ());
+         if (magie2.get_nb_magies () == 0) {
+            update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2, &magie);
          }
       }
-      if (magie_existe2) {
+      if (magie2.get_nb_magies () > 0) {
 
-         temporaire_R = magie2.Up ();
-         if (temporaire_R.x == 0 && temporaire_R.y == 0 && temporaire_R.w == 0 && temporaire_R.h == 0) {
-            magie_existe2 = false;
-         }
-         if (!magie_existe) {
-            update_screen (&perso_1, &map, &var, &magie2, perso_2.get_text ());
-            update_screen (&perso_2, &map2, &var2, perso_1.get_text ());
+         magie2.Up ();
+
+         if (magie.get_nb_magies () == 0) {
+            update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2, &magie2);
          }
 
          perso_1.up (&magie2, perso_2.get_degats ());
 
       }
-      if (magie_existe && magie_existe2) {
-         update_screen (&perso_1, &map, &var, &magie, &magie2, perso_2.get_text ());
-         update_screen (&perso_2, &map2, &var2, &magie, &magie2, perso_1.get_text ());
+      if (magie.get_nb_magies () > 0 && magie2.get_nb_magies () > 0) {
+            update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2, &magie, &magie2);
       }
-      if (!magie_existe && !magie_existe2) {
-         update_screen (&perso_1, &map, &var, perso_2.get_text ());
-         update_screen (&perso_2, &map2, &var2, perso_1.get_text ());
+      if (magie.get_nb_magies () == 0 && magie2.get_nb_magies () == 0) {
+            update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2);
       }
    }
 }
 
 
-void update_screen (Perso *perso_1, Back *map, Basic *var, SDL_Texture *text_perso_adv) {
+void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2) {
    var -> clear ();
-   map -> afficher (var -> get_renderer ());
-   perso_1 -> afficher (var -> get_renderer (), text_perso_adv);
+   var2 -> clear ();
+   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
+   map2 -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
+   perso_1 -> afficher (var -> get_renderer (), 1);
+   perso_1 -> afficher (var2 -> get_renderer (), 2);
+   perso_2 -> afficher (var -> get_renderer (), 2);
+   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   var -> render_present ();
+   var2 -> render_present ();
+}
+
+
+void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2, Magie *magie) {
+   var -> clear ();
+   var2 -> clear ();
+   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
+   map2 -> afficher (var -> get_renderer (), var -> get_Rscreen ());
+   perso_1 -> afficher (var -> get_renderer (), 1);
+   perso_1 -> afficher (var2 -> get_renderer (), 2);
+   perso_2 -> afficher (var -> get_renderer (), 2);
+   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    var -> render_present ();
 }
 
 
-void update_screen (Perso *perso_1, Back *map, Basic *var, Magie *magie, SDL_Texture *text_perso_adv) {
+void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2, Magie *magie, Magie *magie2) {
    var -> clear ();
-   map -> afficher (var -> get_renderer ());
-   perso_1 -> afficher (var -> get_renderer (), text_perso_adv);
-   magie -> afficher (var -> get_renderer ());
+   var2 -> clear ();
+   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
+   map -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
+   map2 -> afficher (var -> get_renderer (), var -> get_Rscreen ());
+   map2 -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
+   perso_1 -> afficher (var -> get_renderer (), 1);
+   perso_1 -> afficher (var2 -> get_renderer (), 2);
+   perso_2 -> afficher (var -> get_renderer (), 2);
+   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
+   magie2 -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    var -> render_present ();
+   var2 -> render_present ();
 }
 
 
-void update_screen (Perso *perso_1, Back *map, Basic *var, Magie *magie, Magie *magie2, SDL_Texture *text_perso_adv) {
-   var -> clear ();
-   map -> afficher (var -> get_renderer ());
-   perso_1 -> afficher (var -> get_renderer (), text_perso_adv);
-   magie -> afficher (var -> get_renderer ());
-   magie2 -> afficher (var -> get_renderer ());
-   var -> render_present ();
-}
+
 
 
 

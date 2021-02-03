@@ -23,7 +23,8 @@ Basic::Basic () {
 
    m_fenetre = SDL_CreateWindow ("RPG", 0, 0, 900, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
    m_renderer = SDL_CreateRenderer (m_fenetre, -1, SDL_RENDERER_ACCELERATED);
-   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 900, 600);
+   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 90 * 25, 60 * 25);
+   m_screen = (SDL_Rect) {0, 0, 900, 600};
    m_font = TTF_OpenFont ("../lib_malo/C059.otf", 30);
 
    SDL_SetRenderTarget (m_renderer, m_render);
@@ -34,7 +35,8 @@ Basic::Basic (size_t _long, size_t haut) {
 
    m_fenetre = SDL_CreateWindow ("RPG", _long, haut, 900, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
    m_renderer = SDL_CreateRenderer (m_fenetre, -1, SDL_RENDERER_ACCELERATED);
-   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 900, 600);
+   m_render = SDL_CreateTexture (m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 90 * 25, 60 * 25);
+   m_screen = (SDL_Rect) {0, 0, 900, 600};
    m_font = TTF_OpenFont ("../lib_malo/C059.otf", 30);
 
    SDL_SetRenderTarget (m_renderer, m_render);
@@ -58,7 +60,7 @@ void Basic::render_present () {
 
    SDL_RenderClear (m_renderer);
 
-   SDL_RenderCopy (m_renderer, m_render, NULL, NULL);
+   SDL_RenderCopy (m_renderer, m_render, &m_screen, NULL);
    SDL_RenderPresent (m_renderer);
 
    SDL_SetRenderTarget (m_renderer, m_render);
@@ -71,8 +73,28 @@ void Basic::clear () {
 }
 
 
-TTF_Font* Basic::get_font () {
+void Basic::change_Xscreen (int ajout) {
+   m_screen.x += ajout;
+}
+
+
+void Basic::change_Yscreen (int ajout) {
+   m_screen.y += ajout;
+}
+
+
+SDL_Rect Basic::get_Rscreen () const {
+   return m_screen;
+}
+
+
+TTF_Font* Basic::get_font () const {
    return m_font;
 }
+
+
+
+
+
 
 

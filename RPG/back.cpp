@@ -32,16 +32,22 @@ Back::~Back () {
    SDL_DestroyTexture (m_mode_mur);
    SDL_DestroyTexture (m_mode_lave);
 
-   for (unsigned int i = 0 ; i < 90 ; i += 1) {
-      for (unsigned int j = 0 ; j < 60 ; j += 1) {
+   for (unsigned int i = 0 ; i < 91 ; ++i) {
+      for (unsigned int j = 0 ; j < 60 ; ++j) {
          SDL_DestroyTexture (m_text_map [i][j]);
       }
    }
 }
 
 void Back::afficher (SDL_Renderer *renderer) {
-   for (unsigned int i = 0 ; i < 90 ; i += 1)
-      for (unsigned int j = 0 ; j < 60 ; j += 1)
+   for (unsigned int i = 0 ; i < 91 ; ++i)
+      for (unsigned int j = 0 ; j < 60 ; ++j)
+         SDL_RenderCopy (renderer, m_text_map [i][j], NULL, &m_map [i][j]);
+}
+
+void Back::afficher (SDL_Renderer *renderer, SDL_Rect show) {
+   for (unsigned int i = convert_cooWindX_to_cooMapX (show.x, false) ; i < convert_cooWindX_to_cooMapX (show.x, false) + convert_cooWindX_to_cooMapX (show.w, true) + 1 ; ++i)
+      for (unsigned int j = convert_cooWindY_to_cooMapY (show.y, false) ; j < convert_cooWindY_to_cooMapY (show.y, false) + convert_cooWindY_to_cooMapY (show.h, true) + 1 ; ++j)
          SDL_RenderCopy (renderer, m_text_map [i][j], NULL, &m_map [i][j]);
 }
 
@@ -60,7 +66,7 @@ void Back::change_to (const int x, const int y, const short int mode) {
 
 void Back::init_map () {
 
-   for (int i = 0 ; i < 90 ; i += 1) {
+   for (int i = 0 ; i < 91 ; i += 1) {
       for (int j = 0 ; j < 60 ; j += 1) {
          m_text_map [i][j] = m_mode_mur;
          m_map [i][j] = (SDL_Rect) {i * 25, j * 25, 25, 25};
@@ -68,24 +74,9 @@ void Back::init_map () {
       }
    }
 
-   change_to_rect ((SDL_Rect) {11, 5, 14, 12});
-
-   change_to_rect ((SDL_Rect) {3, 10, 8, 3});
-   change_to_rect ((SDL_Rect) {25, 10, 8, 3});
-   change_to_rect ((SDL_Rect) {17, 0, 3, 8});
-   change_to_rect ((SDL_Rect) {17, 17, 3, 8});
-
-   change_to_rect ((SDL_Rect) {3, 7, 3, 3});
-   change_to_rect ((SDL_Rect) {3, 13, 3, 3});
-
-   change_to_rect ((SDL_Rect) {30, 7, 3, 3});
-   change_to_rect ((SDL_Rect) {30, 13, 3, 3});
-
-   change_to_rect ((SDL_Rect) {14, 0, 3, 3});
-   change_to_rect ((SDL_Rect) {20, 0, 3, 3});
-
-   change_to_rect ((SDL_Rect) {14, 21, 3, 3});
-   change_to_rect ((SDL_Rect) {20, 21, 3, 3});
+   change_to_rect ((SDL_Rect) {17, 10, 3, 49});
+   change_to_rect ((SDL_Rect) {10, 10, 79, 3});
+   change_to_rect ((SDL_Rect) {10, 5, 16, 14});
 }
 
 
