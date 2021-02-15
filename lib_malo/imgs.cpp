@@ -95,7 +95,7 @@ bool ttf_print_sh_cpp (const char str [], SDL_Texture **T, SDL_Renderer *R, TTF_
 bool ttf_print_B_cpp (const char str [], SDL_Texture **T, SDL_Renderer *R, TTF_Font *pol, SDL_Color C) {
 
    if (pol == NULL) {
-      std::cout << "erreur : ptr \"pol\" null. " << std::endl;
+      std::cout << "error : ptr \"pol\" null. " << std::endl;
       return false;
    }
 
@@ -107,6 +107,26 @@ bool ttf_print_B_cpp (const char str [], SDL_Texture **T, SDL_Renderer *R, TTF_F
 
    return true;
 }
+
+
+
+std::string itostr (int integer) {
+   char* c_str;
+
+   sprintf (c_str, "%d", integer);
+
+   return c_str;
+}
+
+
+char* itoCstr (int integer) {
+   char* c_str;
+
+   sprintf (c_str, "%d", integer);
+
+   return c_str;
+}
+
 
 
 

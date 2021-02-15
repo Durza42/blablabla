@@ -5,6 +5,7 @@
 #include "autres.h"
 #include "class.h"
 #include "back.h"
+#include "modele_arme.h"
 #include "magie.h"
 #include "Perso.h"
 #include "boucle.h"
@@ -23,23 +24,37 @@ int boucle () {
    Basic var (0, 0);
    Basic var2 (100, 600);
 
+   Modele modeles;
+
       /* deux map sont malheureusement obligatoires, car une texture est affiliée à un renderer et ne peut s'afficher sur un autre. */
-   Back map (var.get_renderer ());
-   Back map2 (var2.get_renderer ());
+   Back map (var.get_renderer (), modeles);
+   Back map2 (var2.get_renderer (), modeles);
 
-   Perso perso_1 (var.get_renderer (), var2.get_renderer (), "squelette", (SDL_Color) {128, 128, 128}, var.get_font ());
-   Perso perso_2 (var2.get_renderer (), var.get_renderer (), "viking", (SDL_Color) {50, 50, 150}, var.get_font ());
+   int x = 0;
+   int y = 0;
 
-   SDL_Event event;
+   Perso perso_1 (var.get_renderer (), var2.get_renderer (), modeles, "goliath", (SDL_Color) {128, 128, 128}, var.get_font (), &x, &y, 200, 1, map, var.get_Rscreen ());
+   
+   std::cout << x << std::endl;
+
+   var.change_Xscreen (x);
+   var.change_Yscreen (y);
+
+   Perso perso_2 (var2.get_renderer (), var.get_renderer (), modeles, "sauron", (SDL_Color) {50, 50, 150}, var.get_font (), &x, &y, 7, 125, map2, var2.get_Rscreen ());
+
+   var2.change_Xscreen (x);
+   var2.change_Yscreen (y);
 
    Magie magie (var.get_renderer (), var2.get_renderer (), (SDL_Rect) {-50, -50, 50, 50}, perso_1.get_orientation (), perso_1.get_porte ());
    Magie magie2 (var.get_renderer (), var2.get_renderer (), (SDL_Rect) {-50, -50, 50, 50}, perso_2.get_orientation (), perso_2.get_porte ());
+
+   SDL_Event event;
 
    unsigned int right = 0, left = 0, up = 0, down = 0;
 
    while (1) {
 
-      SDL_Delay (15); // 60 fps
+      SDL_Delay (15); // ~60 fps
 
       if (right + 500 > SDL_GetTicks ()) {
          var2.change_Xscreen (perso_2.droite (map, var2.get_Rscreen ()));
@@ -82,6 +97,9 @@ int boucle () {
             else if (event.key.keysym.sym == SDLK_d) {
                perso_2.vise_special ();
             }
+            else if (event.key.keysym.sym == SDLK_e) {
+               perso_2.take_arme (&map, modeles, var2.get_renderer (), var.get_renderer (), var.get_font ());
+            }
          }
          else if (event.type == SDL_KEYUP) {
             if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d) {
@@ -117,7 +135,7 @@ int boucle () {
                if (event.motion.yrel < 0) // haut
                   var.change_Yscreen (perso_1.haut (map, var.get_Rscreen ()));
                else if (event.motion.yrel > 0) // bas
-                  var.change_Yscreen (perso_1.bas (map, var2.get_Rscreen ()));
+                  var.change_Yscreen (perso_1.bas (map, var.get_Rscreen ()));
             }
          }
          else if (event.type == SDL_MOUSEBUTTONDOWN) { // on appuie sur une touche de la souris
@@ -132,12 +150,23 @@ int boucle () {
                magie.add_magie (perso_1.get_pos (), perso_1.get_orientation (), perso_1.get_porte ());
             }
          }
+         else if (event.type == SDL_MOUSEWHEEL) { // on utilise la mollette
+            perso_1.take_arme (&map, modeles, var.get_renderer (), var2.get_renderer (), var.get_font ());
+         }
       }
+
+      perso_1.up_arme (perso_2.get_arme (), perso_2.get_degats_arme (), var.get_renderer (), var.get_font ());
+      perso_2.up_arme (perso_1.get_arme (), perso_1.get_degats_arme (), var.get_renderer (), var.get_font ());
+
+      perso_1.up_pos (map, var.get_renderer (), var.get_font ());
+      perso_2.up_pos (map, var.get_renderer (), var.get_font ());
+
       if (magie.get_nb_magies () > 0) {
 
          magie.Up ();
 
-         perso_2.up (&magie, perso_1.get_degats ());
+         perso_2.up (&magie, perso_1.get_degats (), var.get_renderer (), var.get_font ());
+         perso_1.up (&magie2, perso_2.get_degats (), var.get_renderer (), var.get_font ());
 
          if (magie2.get_nb_magies () == 0) {
             update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2, &magie);
@@ -151,7 +180,8 @@ int boucle () {
             update_screen (&perso_1, &perso_2, &map, &map2, &var, &var2, &magie2);
          }
 
-         perso_1.up (&magie2, perso_2.get_degats ());
+         perso_1.up (&magie2, perso_2.get_degats (), var.get_renderer (), var.get_font ());
+         perso_2.up (&magie, perso_1.get_degats (), var.get_renderer (), var.get_font ());
 
       }
       if (magie.get_nb_magies () > 0 && magie2.get_nb_magies () > 0) {
@@ -166,46 +196,53 @@ int boucle () {
 
 void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2) {
    var -> clear ();
-   var2 -> clear ();
-   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
-   map2 -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
-   perso_1 -> afficher (var -> get_renderer (), 1);
-   perso_1 -> afficher (var2 -> get_renderer (), 2);
-   perso_2 -> afficher (var -> get_renderer (), 2);
-   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   map -> afficher (var -> get_renderer ());
+   perso_1 -> afficher (var -> get_renderer (), 1, var -> get_font ());
+   perso_2 -> afficher (var -> get_renderer (), 2, var -> get_font ());
    var -> render_present ();
+
+   var2 -> clear ();
+   map2 -> afficher (var2 -> get_renderer ());
+   perso_1 -> afficher (var2 -> get_renderer (), 2, var -> get_font ());
+   perso_2 -> afficher (var2 -> get_renderer (), 1, var -> get_font ());
    var2 -> render_present ();
 }
 
 
 void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2, Magie *magie) {
    var -> clear ();
-   var2 -> clear ();
-   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
-   map2 -> afficher (var -> get_renderer (), var -> get_Rscreen ());
-   perso_1 -> afficher (var -> get_renderer (), 1);
-   perso_1 -> afficher (var2 -> get_renderer (), 2);
-   perso_2 -> afficher (var -> get_renderer (), 2);
-   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   map -> afficher (var -> get_renderer ());
+   perso_1 -> afficher (var -> get_renderer (), 1, var -> get_font ());
+   perso_2 -> afficher (var -> get_renderer (), 2, var -> get_font ());
    magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    var -> render_present ();
+
+   var2 -> clear ();
+   map2 -> afficher (var2 -> get_renderer ());
+   perso_1 -> afficher (var2 -> get_renderer (), 2, var -> get_font ());
+   perso_2 -> afficher (var2 -> get_renderer (), 1, var -> get_font ());
+   magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
+   var2 -> render_present ();
 }
 
 
 void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2, Magie *magie, Magie *magie2) {
    var -> clear ();
-   var2 -> clear ();
-   map -> afficher (var -> get_renderer (), var -> get_Rscreen ());
-   map -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
-   map2 -> afficher (var -> get_renderer (), var -> get_Rscreen ());
-   map2 -> afficher (var2 -> get_renderer (), var2 -> get_Rscreen ());
-   perso_1 -> afficher (var -> get_renderer (), 1);
-   perso_1 -> afficher (var2 -> get_renderer (), 2);
-   perso_2 -> afficher (var -> get_renderer (), 2);
-   perso_2 -> afficher (var2 -> get_renderer (), 1);
+   map -> afficher (var -> get_renderer ());
+   map2 -> afficher (var -> get_renderer ());
+   perso_1 -> afficher (var -> get_renderer (), 1, var -> get_font ());
+   perso_2 -> afficher (var -> get_renderer (), 2, var -> get_font ());
    magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    magie2 -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    var -> render_present ();
+
+   var2 -> clear ();
+   map -> afficher (var2 -> get_renderer ());
+   map2 -> afficher (var2 -> get_renderer ());
+   perso_1 -> afficher (var2 -> get_renderer (), 2, var -> get_font ());
+   perso_2 -> afficher (var2 -> get_renderer (), 1, var -> get_font ());
+   magie -> afficher (var -> get_renderer (), var2 -> get_renderer ());
+   magie2 -> afficher (var -> get_renderer (), var2 -> get_renderer ());
    var2 -> render_present ();
 }
 

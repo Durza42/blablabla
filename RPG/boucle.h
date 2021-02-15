@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include "modele_arme.h"
 
 int boucle ();
 void update_screen (Perso *perso_1, Perso *perso_2, Back *map, Back *map2, Basic *var, Basic *var2);

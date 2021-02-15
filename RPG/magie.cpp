@@ -21,14 +21,21 @@
 
    // assembleur
 Magie::Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2) {
+
+   m_nb_magie = 0;
+
    ld_img_cpp (&m_magie1, renderer1, "imgs/magie.bmp");
    ld_img_cpp (&m_magie2, renderer2, "imgs/magie.bmp");
 }
 
    // assembleur
 Magie::Magie (SDL_Renderer *renderer1, SDL_Renderer *renderer2, SDL_Rect empl_dep, int orientation, int trajet) {
+
+   m_nb_magie = 0;
+
    ld_img_cpp (&m_magie1, renderer1, "imgs/magie.bmp");
    ld_img_cpp (&m_magie2, renderer2, "imgs/magie.bmp");
+
    add_magie (empl_dep, orientation, trajet);
 }
 
@@ -70,8 +77,6 @@ void Magie::delete_magie (const int id) {
    m_nb_magie -= 1;
 
 }
-
-
 
 
 void Magie::Up () {
@@ -183,6 +188,18 @@ SDL_Rect Magie::get_rect (const int id) {
 int Magie::get_nb_magies () const {
    return m_nb_magie;
 }
+
+
+SDL_Texture* Magie::get_texture (int id_renderer) {
+   if (id_renderer == 1)
+      return m_magie1;
+   else if (id_renderer == 2)
+      return m_magie2;
+
+   return NULL;
+}
+
+
 
 
 

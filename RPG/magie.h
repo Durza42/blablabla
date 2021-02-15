@@ -23,10 +23,11 @@ class Magie {
    void Up (const size_t i);
    SDL_Rect get_rect (const int id);
    int get_nb_magies () const;
+   SDL_Texture* get_texture (int id_renderer);
 
   private:
 
-      /* une seulle apparence, mais deux fenêtres */
+      /* une seule apparence, mais deux fenêtres */
    SDL_Texture *m_magie1;
    SDL_Texture *m_magie2;
 
